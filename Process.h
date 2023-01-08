@@ -51,7 +51,82 @@ void RGBtoHSV(uint8_t* src, int size, std::vector<float> &out)
     }
 }
 
-void HSVtoRGB()
+void HSVtoRGB(float* src, int size, std::vector<uint8_t> &out) 
 {
+    int i;
+    double f, p, q, t;
+    double r = 0, g = 0, b=0;
 
+    for (int n=0; n<size; n+=3) 
+    {
+        float H = (int)(*src * 360.0f);
+        src++;
+        float S = *src;
+        src++;
+        float V = *src;
+        src++;
+
+        if ( S == 0 ) 
+        {
+            r = V;
+            g = V;
+            b = V;
+        }
+        else
+        {
+            if (H == 360)
+                H = 0;
+            else 
+                H = H / 60;
+
+            i = (int)trunc(H);
+            f = H - i;
+            
+            p = V * (1.0 - S);
+            q = V * (1.0 - (S * f));
+            t = V * (1.0 - (S * (1.0 - f)));
+
+            switch (i)
+            {
+                case 0:
+                    r = V;
+                    g = t;
+                    b = p;
+                    break;
+
+                case 1:
+                    r = q;
+                    g = V;
+                    b = p;
+                    break;
+
+                case 2:
+                    r = p;
+                    g = V;
+                    b = t;
+                    break;
+
+                case 3:
+                    r = p;
+                    g = q;
+                    b = V;
+                    break;
+
+                case 4:
+                    r = t;
+                    g = p;
+                    b = V;
+                    break;
+
+                default:
+                    r = V;
+                    g = p;
+                    b = q;
+                    break;
+            }
+            out.push_back((uint8_t)(r*255.0f));
+            out.push_back((uint8_t)(g*255.0f));
+            out.push_back((uint8_t)(b*255.0f));
+        }
+    }
 }

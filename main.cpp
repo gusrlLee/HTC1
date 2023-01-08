@@ -62,14 +62,32 @@ int main(int argc, char* argv[])
     std::cout << "src size = " << src.size() << std::endl;
     // convert RGB to HSV color space
     RGBtoHSV(src.data(), src.size(), hsv_src);
+    std::vector<uint8_t> cvt_src;
+    HSVtoRGB(hsv_src.data(), hsv_src.size(), cvt_src);
 
-    for (int i=0; i<hsv_src.size(); i++) {
-        std::cout << "data ["<< i << "] = " << hsv_src[i] << std::endl;
+    for (int i=0; i<cvt_src.size(); i+=3) {
+        uint8_t r = (int)(cvt_src[i + 0]);
+        uint8_t g = (int)(cvt_src[i + 1]);
+        uint8_t b = (int)(cvt_src[i + 2]);
+
+        printf("r = %d\n", r);
+        printf("g = %d\n", g);
+        printf("b = %d\n", b);
+
+        r = (int)(src[i + 0]);
+        g = (int)(src[i + 1]);
+        b = (int)(src[i + 2]);
+        
+        printf("=========================================================\n");
+        printf("r = %d\n", r);
+        printf("g = %d\n", g);
+        printf("b = %d\n", b);
+        printf("=========================================================\n");
+
+        if (i > 9) break;
     }
 
-    
-
-    // ----------------------------------------------------------------------------------------------------- 
+        // ----------------------------------------------------------------------------------------------------- 
     // cv::imshow("window", image);
     // cv::waitKey();
     return 0;
